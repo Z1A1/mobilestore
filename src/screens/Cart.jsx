@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View, FlatList, Button ,Image} from 'react-native'
+import { StyleSheet, Text, View, FlatList, Button ,Image,TouchableOpacity} from 'react-native'
 import React, { useContext } from 'react'
 import { ItemContext } from '../context/ItemContext';
+import back from '../assests/back.png';
+import { useNavigation } from '@react-navigation/native';
 
 const Cart = () => {
+   const navigation = useNavigation();
   const { items, incrementQuantity, decrementQuantity, removeItem } = useContext(ItemContext);
   
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -12,6 +15,18 @@ const Cart = () => {
   
   return (
     <View style={styles.container}>
+       <View style={styles.heading}>
+              <View style={styles.iconContainer}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Image source={back} style={styles.imageStyle} />
+                </TouchableOpacity>
+                <Text style={{ color: 'white' ,fontSize:20}}>item Details</Text>
+               
+              </View>
+            </View>
+            <View style={styles.cartContainer}>
+
+
       <Text style={styles.header}>Cart Items ({items.length})</Text>
       
       {items.length === 0 ? (
@@ -27,10 +42,10 @@ const Cart = () => {
                        style={styles.bannerImage}
                      />
               <Text style={styles.itemText}>
-                {item.name} (x{item.quantity}) - ₹{item.price}
+                {item.name} (x{item.quantity}) - OMR {item.price}
               </Text>
               <Text style={styles.subtotal}>
-                Subtotal: ₹{(item.price * item.quantity).toFixed(2)}
+                Subtotal: OMR {(item.price * item.quantity).toFixed(2)}
               </Text>
               
               <View style={styles.buttonContainer}>
@@ -44,7 +59,8 @@ const Cart = () => {
         />
       )}
       
-      <Text style={styles.total}>Total: ₹{total.toFixed(2)}</Text>
+      <Text style={styles.total}>Total: OMR {total.toFixed(2)}</Text>
+            </View>
     </View>
   )
 }
@@ -54,8 +70,12 @@ export default Cart
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+
     backgroundColor: '#F0BEB4'
+  },
+cartContainer:{
+ flex: 1,
+    padding: 20,
   },
   header: {
     fontSize: 24,
@@ -108,5 +128,21 @@ const styles = StyleSheet.create({
     height: 50,
     resizeMode: 'contain',
     borderRadius: 10,
+  },
+    heading: {
+    height: 70,
+    width: '100%',
+    backgroundColor: 'red',
+  },
+    iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  columnGap:100,
+    padding: 20,
+  },
+    imageStyle: {
+    height: 20,
+    width: 20,
+    resizeMode: 'contain',
   },
 })
